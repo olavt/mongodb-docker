@@ -157,7 +157,7 @@ UUID=<UUID> /mnt/mongodb xfs defaults 1 1
 # Run MongoDB in a Docker container
 
 ```
-sudo docker run --name mongodb -v /mnt/mongodb:/data/db -d --restart=always mongo
+$ docker run --name mongodb -p 27017:27017 -v /mnt/mongodb:/data/db -d --restart=always mongo
 ```
 
 # Connect to MongoDB in container
@@ -171,3 +171,47 @@ Now you can start the mongo shell by issuing the command:
 ```
 mongo
 ```
+
+## Some useful MongoDBH commands
+
+### List databases
+
+```
+> show dbs
+```
+
+### Set curent database
+
+```
+> use <database-name>
+```
+
+### Display curent database
+
+```
+> db
+```
+
+### Delete current database
+
+```
+> db.dropDatabase()
+```
+
+### Create a new database
+
+If a database does not exist, MongoDB creates the database when you first store data for that database. As such, you can switch to a non-existent database and perform the following operation in the mongo shell:
+
+```
+> use <new-database-name>
+
+> db.myNewCollection1.insertOne( { x: 1 } )
+```
+
+### Create a new collection (explicitly)
+
+```
+> db.createCollection(<name>)
+```
+
+
