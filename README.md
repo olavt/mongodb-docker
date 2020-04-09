@@ -214,32 +214,86 @@ If a database does not exist, MongoDB creates the database when you first store 
 > db.createCollection(<name>)
 ```
 
+### Indexes
+
+Create simple indexes:
+```
+> db.imageProperties.createIndex( { "imagePath": 1 } )
+```
+
+```
+ > db.imageProperties.createIndex( { "imageProperties.dateTimeOriginal": 1 } )
+```
+
+Create text index:
+```
+> db.imageProperties.createIndex(
+  {
+    "imageProperties.cameraMaker": "text",
+    "imageProperties.cameraModel": "text",
+    "imageProperties.lensMake": "text",
+    "imageProperties.lensModel": "text",
+    "imageAnalysis.categories.name": "text",
+    "imageAnalysis.color.dominantColors": "text",
+    "imageAnalysis.description.tags": "text",
+    "imageAnalysis.description.captions.text": "text",
+    "imageAnalysis.faces.gender": "text",
+    "imageAnalysis.tags.name": "text",
+  },
+  { name: "TextIndex" }
+)
+```
+
+Delete index:
+```
+> db.imageProperties.dropIndex("TextIndex")
+```
+
+Take a look at index usage:
+```
+> db.imageProperties.aggregate( [ { $indexStats: { } } ] )
+```
+
+List indexes:
+
+> db.imageProperties.getIndexes()
+
+
 ## Example queries
 
 Simple find
-
+```
 > db.imageProperties.find({ "imagePath" : "2020/2020-01-04/IMG_0931.JPG" })
+```
 
 Return count of documents
-
+```
 > db.imageProperties.count()
+```
 
-Return distinct values
-
+Return distinct values:
+```
 > db.imageProperties.distinct("imageProperties.cameraMaker")
 
 > db.imageProperties.distinct("imageProperties.cameraModel")
+```
 
-Return all docuements after a date / time
-
+Return all docuements after a date / time:
+```
 > db.imageProperties.find({ "imageProperties.dateTimeOriginal" : { $gte: "2018-01-01T00:00:00.0000000" }})
+```
 
 Return only the "imageProperties.dateTimeOriginal" field:
+```
+> db.imageProperties.find({ "imagePath" : "2017/2017-01-01/IMG_0706.JPG" }, {"imageProperties.dateTimeOriginal" : 1, _id: 0)
+```
 
-> db.imageProperties.find({ "imagePath" : "2017/2017-01-01/IMG_0706.JPG" }, {"imageProperties.dateTimeOriginal" : 1, _id: 0})
-
-Return matching documents between two dates
-
+Return matching documents between two dates:
+```
 > db.imageProperties.find( { $and: [ { "imageProperties.dateTimeOriginal": { $gte: "2017-01-01T00:00:00.0000000" } }, { "imageProperties.dateTimeOriginal": { $lte: "2017-02-01T00:00:00.0000000" } } ] } )
+```
 
-
+Search text:
+```
+> db.imageProperties.find( { $text: { $search: "car" } }, {"imagePath" : 1, _id: 0 } )
+```
