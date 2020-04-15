@@ -222,7 +222,7 @@ Create simple indexes:
 ```
 
 ```
- > db.imageProperties.createIndex( { "imageProperties.dateTimeOriginal": 1 } )
+ > db.imageProperties.createIndex( { "imageProperties.dateTimeOriginal": -1 } )
 ```
 
 Create text index:
@@ -239,10 +239,22 @@ Create text index:
     "imageAnalysis.description.captions.text": "text",
     "imageAnalysis.faces.gender": "text",
     "imageAnalysis.tags.name": "text",
+    "mapProperties.addresses.address.street": "text",
+    "mapProperties.addresses.address.streetName": "text",
+    "mapProperties.addresses.address.countrySubdivision": "text",
+    "mapProperties.addresses.address.municipality": "text",
+    "mapProperties.addresses.address.country": "text",
+    "mapProperties.addresses.address.countryCode": "text",
+    "mapProperties.addresses.address.countryCodeISO3": "text",
+    "imageProperties.dateTimeOriginal": -1,
   },
   { name: "TextIndex" }
 )
 ```
+
+List indexes:
+
+> db.imageProperties.getIndexes()
 
 Delete index:
 ```
@@ -253,11 +265,6 @@ Take a look at index usage:
 ```
 > db.imageProperties.aggregate( [ { $indexStats: { } } ] )
 ```
-
-List indexes:
-
-> db.imageProperties.getIndexes()
-
 
 ## Example queries
 
