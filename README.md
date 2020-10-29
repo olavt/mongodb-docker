@@ -93,7 +93,7 @@ Logout from the current user and login again for the above command to take effec
 List the disks on the server:
 
 ```
-$ sudo lshw -class disk -short
+$ sudo lshw -class disk -short (or lsblk -o KNAME,TYPE,SIZE,MODEL)
 ```
 
 The output should look something like this:
@@ -118,13 +118,13 @@ Create a new partition by issuing the following command:
 $ sudo fdisk /dev/sdb
 ```
 
+Enter 'n' at the fdisk command prompt to add a new partition. Select defaults for all the inputs and remember to select "w" when returning to the fdisk command prompt in order to write table to disk and exit.
+
 Format the partition as XFS:
 
 ```
 sudo mkfs.xfs -L mongodb /dev/sdb1
 ```
-
-Enter 'n' at the fdisk command prompt to add a new partition. Select defaults for all the inputs and remember to select "w" when returning to the fdisk command prompt in order to write table to disk and exit.
 
 ## Mount the new filesystem
 
@@ -292,12 +292,17 @@ Return all docuements after a date / time:
 
 Return only the "imageProperties.dateTimeOriginal" field:
 ```
-> db.imageProperties.find({ "imagePath" : "2017/2017-01-01/IMG_0706.JPG" }, {"imageProperties.dateTimeOriginal" : 1, _id: 0)
+> db.imageProperties.find({ "imagePath" : "2017/2017-01-01/IMG_0706.JPG" }, {"imageProperties.dateTimeOriginal" : 1, _id: 0})
 ```
 
 Return matching documents between two dates:
 ```
 > db.imageProperties.find( { $and: [ { "imageProperties.dateTimeOriginal": { $gte: "2017-01-01T00:00:00.0000000" } }, { "imageProperties.dateTimeOriginal": { $lte: "2017-02-01T00:00:00.0000000" } } ] } )
+```
+
+Return matching documents between two dates and return the "imageAnalysis.tags.name" field:
+```
+db.imageProperties.find( { $and: [ { "imageProperties.dateTimeOriginal": { $gte: "2020-10-28T00:00:00.0000000" } }, { "imageProperties.dateTimeOriginal": { $lte: "2020-10-29T00:00:00.0000000" } } ] }, {"imageAnalysis.tags.name" : 1, _id: 0} )
 ```
 
 Search text:
