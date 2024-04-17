@@ -309,3 +309,9 @@ Search text:
 ```
 > db.imageProperties.find( { $text: { $search: "car" } }, {"imagePath" : 1, _id: 0 } )
 ```
+
+## Backup the database to a file
+
+```
+ $ /usr/bin/mongodump --forceTableScan --uri=mongodb://mongodb:27017/olavt-images --archive > mongodb.dump
+ ```
