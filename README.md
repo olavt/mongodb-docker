@@ -315,3 +315,9 @@ Search text:
 ```
  $ /usr/bin/mongodump --forceTableScan --uri=mongodb://mongodb:27017/olavt-images --archive > mongodb.dump
  ```
+
+ ## Restore the database from a file
+
+```
+ $ mongorestore --username <username> --uri="mongodb+srv://<hostname>/<database-name>" --archive=mongodb.dump
+ ```
